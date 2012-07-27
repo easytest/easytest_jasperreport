@@ -1,0 +1,11 @@
+/*C2*/SET SCHEMA PUBLIC
+create table projeto(\u000a  i_projeto integer not null,\u000a  nome varchar(30),\u000a  descricao varchar(500),\u000a  report varchar(1),\u000a  ativo varchar(1),\u000a  primary key(i_projeto)\u000a)\u000a
+create table banco_dados(\u000a  i_projeto integer not null,\u000a  driver varchar(100),\u000a  url varchar(100),\u000a  usuario varchar(30),\u000a  senha varchar(30),\u000a  primary key(i_projeto),\u000a  FOREIGN KEY(i_projeto)\u000a  REFERENCES projeto(i_projeto)\u000a  ON DELETE NO ACTION\u000a  ON UPDATE NO ACTION  \u000a)\u000a
+create table caso_teste(\u000a   i_projeto integer not null,\u000a   i_caso_teste integer not null,\u000a   nome varchar(50) not null,\u000a   descricao varchar(500),\u000a   relatorio_jasper varchar(30),\u000a   mensagens varchar(500),\u000a   compare_error varchar(1),\u000a   script_test_data BLOB not null,\u000a   script_execute_data BLOB,\u000a   primary key(i_projeto, i_caso_teste),\u000a  FOREIGN KEY(i_projeto)\u000a  REFERENCES projeto(i_projeto)\u000a  ON DELETE NO ACTION\u000a  ON UPDATE NO ACTION   \u000a)\u000a
+create table parametro(\u000a   i_projeto integer not null,\u000a   i_caso_teste integer not null,\u000a   i_parametro integer not null,\u000a   nome varchar(50) not null,\u000a   valor varchar(50) not null,\u000a   tipo varchar(1) not null,\u000a   primary key(i_projeto, i_caso_teste,i_parametro),\u000a  FOREIGN KEY(i_projeto, i_caso_teste)\u000a  REFERENCES caso_teste(i_projeto, i_caso_teste)\u000a  ON DELETE NO ACTION\u000a  ON UPDATE NO ACTION   \u000a\u000a)\u000a
+/*\u000aalter tables\u000a*/\u000aalter table projeto alter column report varchar(100)\u000a\u000a
+ROLLBACK
+ROLLBACK
+alter table caso_teste add column parametro clob\u000a\u000a\u000a
+alter table caso_teste alter column parametro blob\u000a\u000a
+DISCONNECT
