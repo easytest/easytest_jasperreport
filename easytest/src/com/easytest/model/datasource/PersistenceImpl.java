@@ -30,8 +30,10 @@ public class PersistenceImpl {
         return persistence;
     }
 
-    /**Retorna uma conexão com o banco de dados*/
-    public final Connection getConn() throws AttributeNotFoundException, ClassNotFoundException, SQLException {
+    /**
+     * Retorna uma conexão com o banco de dados
+     */
+    public final Connection getConn() throws ReportTestException, ClassNotFoundException, SQLException {
 
         if (conn != null) {
             return conn;
@@ -39,15 +41,10 @@ public class PersistenceImpl {
 
         //busca as configurações do banco de dados
         BancoDadosDao dao = new BancoDadosDao();
-        BancoDados banco = null;
-        try {
-            Projeto p = DataManager.getInstance().getProjeto();
-            banco = dao.getBancoDados(p.getIProjeto());
-            if (banco == null) {
-                throw new AttributeNotFoundException("Não existe um banco de dados configurado para este projeto!");
-            }
-        } catch (ReportTestException er) {
-            throw new AttributeNotFoundException(er.getMessage());
+        Projeto p = DataManager.getInstance().getProjeto();
+        BancoDados banco = dao.getBancoDados(p.getIProjeto());
+        if (banco == null) {
+            throw new ReportTestException("Não existe um banco de dados configurado para este projeto!");
         }
 
         //obtém uma conexão com o banco de dados
@@ -55,15 +52,15 @@ public class PersistenceImpl {
         String user = banco.getUser();
         String pass = banco.getPass();
 
-        if (driverClass == null || user == null || pass == null || driverClass.trim().length() == 0 || user.trim().length() == 0 || pass.trim().length() == 0) {
-            throw new AttributeNotFoundException("Existem parâmetros de conexão com o banco de dados que não foram defidos! Favor analisar as configurações do sistema!");
+        if (driverClass == null || user == null || driverClass.trim().length() == 0 || user.trim().length() == 0) {
+            throw new ReportTestException("Existem parâmetros de conexão com o banco de dados que não foram defidos! Favor analisar as configurações do sistema!");
         }
 
         String urlConnection = banco.getConnectionUrl();
         Class.forName(driverClass);
         Properties prop = new Properties();
         prop.put("user", user);
-        prop.put("password", pass);
+        prop.put("password", pass == null ?  "" : pass.trim());
         conn = DriverManager.getConnection(urlConnection, prop);
         return conn;
 

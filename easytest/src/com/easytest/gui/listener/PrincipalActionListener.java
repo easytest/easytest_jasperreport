@@ -45,6 +45,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.base.JRBasePrintRectangle;
 import net.sf.jasperreports.engine.base.JRBasePrintText;
+import net.sf.jasperreports.engine.convert.TextElementConverter;
+import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -422,7 +424,13 @@ public class PrincipalActionListener extends ActionListenerImpl {
                         //IMPLEMENTAR A COMPARAÇÃO AQUI
                         TestCase casoTeste = getSelectedCasoTesteJList();
                         if (casoTeste != null) {
-                            comparaReports(p, casoTeste);
+                            try{
+                                comparaReports(p, casoTeste);
+                            }catch(ReportTestException e){
+                                JOptionPane.showMessageDialog(frame, e.getMessage());
+                                break;
+                            }
+                            
                         }
 
                         //grava os dados do caso de teste com erro
@@ -467,7 +475,7 @@ public class PrincipalActionListener extends ActionListenerImpl {
         return result;
     }
 
-    private void comparaReports(PersistenceImpl p, TestCase casoTeste) {
+    private void comparaReports(PersistenceImpl p, TestCase casoTeste) throws ReportTestException{
         //busca os dados da configuração
         DataManager data = DataManager.getInstance();
         try {
@@ -504,9 +512,6 @@ public class PrincipalActionListener extends ActionListenerImpl {
         } catch (IOException ex) {
             Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
-        } catch (AttributeNotFoundException ex) {
-            Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -514,9 +519,6 @@ public class PrincipalActionListener extends ActionListenerImpl {
             Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         } catch (JRException ex) {
-            Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        } catch (ReportTestException ex) {
             Logger.getLogger(PrincipalActionListener.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
@@ -617,11 +619,12 @@ public class PrincipalActionListener extends ActionListenerImpl {
         JRBasePrintRectangle ret = new JRBasePrintRectangle(
                 text1.getDefaultStyleProvider());
         ret.setForecolor(Color.RED);
-        ret.setKey("ret-generate-1");
+        ret.setKey(text1.getKey() + "ret-generate");
 
         //
         ret.getLinePen().setLineWidth(0.5f);// espeçura da linha
-        ret.setMode((byte) 2);// aplica transparência ao retângulo
+        //ret.setMode((byte) 2);// aplica transparência ao retângulo
+        ret.setMode(ModeEnum.TRANSPARENT);// aplica transparência ao retângulo
         ret.setY(text1.getY());
         ret.setX(text1.getX());
         ret.setWidth(text1.getWidth());
@@ -629,35 +632,50 @@ public class PrincipalActionListener extends ActionListenerImpl {
         ret.setBackcolor(Color.WHITE);
         // map.getPrintPage().addElement(ret);
         pageGenerate.addElement(ret);
-
+        
+        
         // adiciona um texto
         JRBasePrintText elNew = new JRBasePrintText(
                 text1.getDefaultStyleProvider());
 
-        elNew.setKey("text-generate-1");
+        
+        
+        elNew.setMode(ModeEnum.TRANSPARENT);
+        elNew.setKey(text1.getKey() + "text-generate");
         elNew.setForecolor(Color.RED);
+        
+        //elNew.setBackcolor(Color.BLUE);
         elNew.setX(text1.getX());
-        elNew.setY(text1.getY() - 2);
+        elNew.setY(text1.getY() - 7);//2
 
         // calcula o tamanho do componente texto para que não aja quebra de
         // linha e o final do texto seja reimpresso encima do início
         Double width = text1.getText().length() * 3.375;
+        
         if (width.intValue() > text1.getWidth()) {
+            System.out.println("PASSA_1");
             elNew.setWidth(width.intValue());
         } else {
+            System.out.println("PASSA_2");
             elNew.setWidth(text1.getWidth());
         }
 
         elNew.setHeight(text1.getHeight());
         elNew.setFontSize(6);
 
-        elNew.setTextAlignment(text1.getTextAlignment());
+        //elNew.setValue(text1.getText());
+        //elNew.setTextAlignment(text1.getTextAlignment());//método substituido pelo getHorizontalAlignmentValue
+        elNew.setHorizontalAlignment(text1.getHorizontalAlignmentValue());
+        //elNew.setVerticalAlignment(text1.getVerticalAlignmentValue());
+        System.out.println("INFORMA_TEX: " + text1.getText());
+        elNew.setText(text1.getText());
         if (markFault) {
             elNew.setText("N/D");
         } else {
             elNew.setText(text1.getText());
         }
 
+        TextElementConverter.measureTextElement(elNew);
         pageGenerate.addElement(elNew);
     }
 

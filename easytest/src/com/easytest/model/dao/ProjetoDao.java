@@ -22,6 +22,8 @@ public class ProjetoDao extends GenericDao {
             //gera a próxima chave livre
             Integer codigo = freeId(conn);
             
+            p.setIProjeto(codigo);
+            
             String sql = "insert into projeto (i_projeto, nome, descricao, report, ativo) values(?,?,?,?,?)";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, codigo);

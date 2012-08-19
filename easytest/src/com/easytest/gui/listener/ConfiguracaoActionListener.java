@@ -29,9 +29,14 @@ public class ConfiguracaoActionListener implements ActionListener {
             frame.clearForm();
 
         } else if ("gravar".equals(e.getActionCommand())) {
-
+            
             try {
                 Projeto p = frame.getProjeto();
+                
+                if(p.getNome() == null || p.getNome().trim().length() == 0){
+                    throw  new ReportTestException("É obrigatório que o nome do projeto seja informado!");
+                }
+                
                 if (p.getIProjeto() == null) {
                     dao.insert(p);
                 } else {

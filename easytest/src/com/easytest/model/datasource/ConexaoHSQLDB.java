@@ -15,7 +15,7 @@ public class ConexaoHSQLDB {
         Connection conn = null;
         try {
             Class.forName("org.hsqldb.jdbcDriver");
-            conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/reporttest", "sa", "");
+            conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/easytest", "sa", "");
             conn.setAutoCommit(false);
         } catch (SQLException e) {
             throw  new ReportTestException("Erro ao conectar com o banco de dados: " + e.getMessage());
