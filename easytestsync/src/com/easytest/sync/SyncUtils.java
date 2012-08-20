@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.*;
  * @author gilberto
  */
 //TODO: [GILBERTO] Adicionar logs com o log4j
+//TODO: [GILBERTO] Adicionar esta implementação a um agente java para que não 
+//seja necessário alterar o código fonte da aplicação
 public class SyncUtils {
 
     /**
