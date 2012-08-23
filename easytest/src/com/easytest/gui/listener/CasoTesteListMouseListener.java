@@ -21,7 +21,6 @@ public class CasoTesteListMouseListener extends AbstractMouseListener {
             int index = list.getSelectedIndex();
 
             if (index == -1) {
-                System.out.println("RETURN");
                 return;
             }
             CasoTesteListModel model = (CasoTesteListModel)list.getModel();

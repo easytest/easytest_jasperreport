@@ -21,10 +21,6 @@ public class KeyMap {
 	
 
 	public KeyMap(String keyComponent, int page, JRPrintText element, JRPrintPage printPage,boolean validXY) {
-		if(keyComponent == null){
-			//System.out.println("keyComponent: NULL");
-		}
-		
 		this.keyComponent = keyComponent;
 		this.page = page;
 		if(validXY){
@@ -37,14 +33,6 @@ public class KeyMap {
 		this.element = element;
 		this.text = element.getText();
 		this.printPage = printPage;
-                /*
-                if(text != null && text.contains("Salário base")){
-                    System.out.println(">>>>> '" + text + "' " + hashCode());
-                }
-                 * 
-                 */
-
-
 	}
 	
 	public JRPrintPage getPrintPage() {

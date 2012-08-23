@@ -613,8 +613,6 @@ public class PrincipalActionListener extends ActionListenerImpl {
 
         mensageCompareReport += mensagem + "\n";
 
-        System.out.println(mensagem);
-
         // adiciona um retângulo
         JRBasePrintRectangle ret = new JRBasePrintRectangle(
                 text1.getDefaultStyleProvider());
@@ -653,10 +651,8 @@ public class PrincipalActionListener extends ActionListenerImpl {
         Double width = text1.getText().length() * 3.375;
         
         if (width.intValue() > text1.getWidth()) {
-            System.out.println("PASSA_1");
             elNew.setWidth(width.intValue());
         } else {
-            System.out.println("PASSA_2");
             elNew.setWidth(text1.getWidth());
         }
 
@@ -667,7 +663,6 @@ public class PrincipalActionListener extends ActionListenerImpl {
         //elNew.setTextAlignment(text1.getTextAlignment());//método substituido pelo getHorizontalAlignmentValue
         elNew.setHorizontalAlignment(text1.getHorizontalAlignmentValue());
         //elNew.setVerticalAlignment(text1.getVerticalAlignmentValue());
-        System.out.println("INFORMA_TEX: " + text1.getText());
         elNew.setText(text1.getText());
         if (markFault) {
             elNew.setText("N/D");
@@ -742,9 +737,9 @@ public class PrincipalActionListener extends ActionListenerImpl {
 
                     if (o != null && o instanceof TestCase) {
                         TestCase ot = (TestCase) o;
-                        System.out.println("Nome.: " + ot.getName());
+                        System.out.println("Nome.....: " + ot.getName());
                         System.out.println("Descricao: " + ot.getDescription());
-                        System.out.println("Data: " + ot.getStriptTest());
+                        System.out.println("Data.....: " + ot.getStriptTest());
 
                         CasoTesteDao dao = new CasoTesteDao();
                         try {
