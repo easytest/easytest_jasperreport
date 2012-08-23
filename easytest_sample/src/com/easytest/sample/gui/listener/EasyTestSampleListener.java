@@ -3,15 +3,19 @@ package com.easytest.sample.gui.listener;
 import com.easytest.sync.SyncUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.sound.midi.SysexMessage;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -44,8 +48,33 @@ public class EasyTestSampleListener implements ActionListener {
     
 
     private void viewReport(String reportName) throws JRException, SQLException, ClassNotFoundException, FileNotFoundException {
-        JasperReport report = JasperCompileManager.compileReport("V:\\githug\\easytest_jasperreport\\trunk\\easytest_sample\\report\\" + reportName + ".jrxml");
         
+        JFileChooser f = new JFileChooser(new File("."));
+        
+        f.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                if(!f.isDirectory() && !f.getName().endsWith(".jrxml")){
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public String getDescription() {
+                return ".jrxml";
+            }
+        });
+        f.showOpenDialog(null);
+        
+        File file = f.getSelectedFile();
+        
+        if(file == null){
+            throw new FileNotFoundException("Selecione um arquivo");
+        }
+        
+        JasperReport report = JasperCompileManager.compileReport(new FileInputStream(file));
         
         
         Connection conn = null;
